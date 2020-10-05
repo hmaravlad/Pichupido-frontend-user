@@ -18,6 +18,4 @@ COPY ./.nginx/nginx.conf /etc/nginx/nginx.conf
 
 COPY --from=build-stage /pichupido-client-user/dist /usr/share/nginx/html
 
-EXPOSE 8080
-
 CMD ["nginx", "-g", "daemon off;"]
