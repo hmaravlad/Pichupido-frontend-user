@@ -14,7 +14,7 @@ RUN npm run build
 
 FROM nginx:stable as production-stage
 
-COPY ./.nginx/nginx.conf /etc/nginx/nginx.conf
+RUN envsubst < ./.nginx/nginx.conf > /etc/nginx/nginx.conf
 
 COPY --from=build-stage /pichupido-client-user/dist /usr/share/nginx/html
 
