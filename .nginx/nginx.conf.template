@@ -1,6 +1,4 @@
-http {
-    server {
-        listen ${PORT};
-        root  /usr/share/nginx/html;
-    }
+server {
+    listen ${PORT};
+    root  /usr/share/nginx/html;
 }
