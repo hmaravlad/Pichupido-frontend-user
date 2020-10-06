@@ -16,8 +16,6 @@ FROM nginx:stable as production-stage
 
 COPY .nginx/nginx.conf.template /etc/nginx/conf.d/default.conf.template
 
-RUN envsubst < /etc/nginx/conf.d/default.conf.template > /etc/nginx/nginx.conf
-
 COPY --from=build-stage /pichupido-client-user/dist /usr/share/nginx/html
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD /bin/bash -c "envsubst '\$PORT' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf" && nginx -g 'daemon off;'
