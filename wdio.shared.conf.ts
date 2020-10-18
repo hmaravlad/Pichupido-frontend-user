@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
-const path = require('path')
+const path = require('path');
 
-exports.config = {
+export const config = {
   // ==================
   // Specify Test Files
   // ==================

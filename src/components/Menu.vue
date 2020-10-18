@@ -1,5 +1,7 @@
 <template>
-
+<div>
+  Bla
+</div>
 </template>
 
 <script lang="ts">
@@ -17,35 +19,7 @@ export default class SignInComponent extends Vue {
       password: '',
     };
 
-    private modalHub = ModalHub;
-
     public errorMessage = '';
-
-    public facebookAuthUrl = AuthService.facebookAuthUrl;
-
-    public async submitForm() {
-      const isValid = await this.$refs.form.validate();
-      if (isValid) {
-        http
-          .post('/accounts/sign-in', this.form)
-          .then((res: AuthResponse) => {
-            AuthService.saveUser(res);
-            this.modalHub.$emit('close');
-            if (this.$store.getters.cart.length) {
-              ModalHub.$emit('open', 'modal-cart');
-            }
-          })
-          .catch((msg: string) => (this.errorMessage = msg));
-      }
-    }
-
-    public openModalSignUp() {
-      this.modalHub.$emit('open', 'modal-sign-up', { animation: 'slide-left' });
-    }
-
-    public openModalForgotPassword() {
-      this.modalHub.$emit('open', 'modal-forgot-password', { animation: 'slide-left' });
-    }
 }
 </script>
 
