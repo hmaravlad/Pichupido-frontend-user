@@ -1,22 +1,22 @@
-const LocalEnvironment: IEnvironment = {
+const LocalEnvironment: Environment = {
   clientUrl: 'http://localhost:8000',
   adminUrl: 'http://localhost:8081',
   baseApiUrl: 'http://localhost:3000',
 };
 
-const DevEnvironment: IEnvironment = {
+const DevEnvironment: Environment = {
   clientUrl: 'http://localhost:8000',
   adminUrl: 'http://localhost:8081',
   baseApiUrl: 'http://localhost:3000',
 };
 
-const StageEnvironment: IEnvironment = {
+const StageEnvironment: Environment = {
   clientUrl: 'http://localhost:8000',
   adminUrl: 'http://localhost:8081',
   baseApiUrl: 'http://localhost:3000',
 };
 
-const ProdEnvironment: IEnvironment = {
+const ProdEnvironment: Environment = {
   clientUrl: 'http://localhost:8000',
   adminUrl: 'http://localhost:8081',
   baseApiUrl: 'http://localhost:3000',
@@ -43,7 +43,7 @@ const Environment = configureEnvironment();
 
 export default Environment;
 
-interface IEnvironment {
+interface Environment {
   clientUrl: string;
   adminUrl: string;
   baseApiUrl: string;

@@ -4,6 +4,7 @@ import axios from 'axios';
 
 class Http {
   public service: any;
+
   public token: any;
 
   constructor() {
@@ -52,8 +53,8 @@ class Http {
     this.service = axios.create({
       baseURL: Environment.baseApiUrl,
       headers: {
-        Authorization: `JWT ${this.token}`
-      }
+        Authorization: `JWT ${this.token}`,
+      },
     });
   }
 }
