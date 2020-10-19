@@ -1,0 +1,86 @@
+
+//************************ MIXINS **************************
+=placeholder
+  &::-webkit-input-placeholder
+    @content
+  &:-moz-placeholder
+    @content
+  &::-moz-placeholder
+    @content
+  &:-ms-input-placeholder
+    @content
+
+%clearfix
+  *zoom: 1
+  &:before, &:after
+    content: " "
+    display: table
+  &:after
+    clear: both
+
+@mixin bp-1440
+  @media (max-width: 1440px)
+    @content
+//
+//@mixin bp-1300
+//  @media (max-width: 1300px)
+//    @content
+//
+//@mixin bp-1200
+//  @media (max-width: 1200px)
+//    @content
+//
+@mixin bp-1246
+  @media (max-width: 1246px)
+    @content
+
+@mixin bp-960
+  @media (max-width: 960px)
+    @content
+
+@mixin bp-768
+  @media (max-width: 768px)
+    @content
+
+@mixin bp-480
+  @media ( max-width: 480px )
+    @content
+
+@mixin bp-360
+  @media ( max-width: 360px )
+    @content
+
+@mixin mw-250
+  @media (min-width: 250px)
+    @content
+
+@mixin mw-500
+  @media (min-width: 500px)
+    @content
+
+@mixin mw-960
+  @media (min-width: 960px)
+    @content
+
+//************************ MARGINS *************************
+@for $i from 1 through 30
+  .#{m-t}-#{$i}
+    margin-top: 0px + $i
+
+@for $i from 1 through 30
+  .#{m-b}-#{$i}
+    margin-bottom: 0px + $i
+
+//************************ PADDINGS *************************
+@for $i from 1 through 30
+  .#{p-t}-#{$i}
+    padding-top: 0px + $i
+
+@for $i from 1 through 30
+  .#{p-b}-#{$i}
+    padding-bottom: 0px + $i
+
+//************************ FONTS *************************
+@for $i from 1 through 30
+  .#{fs}-#{$i}
+    font-size: 0px + $i

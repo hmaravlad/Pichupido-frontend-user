@@ -1,0 +1,150 @@
+// styles for every component
+
+@import "variables"
+@import "mixins"
+@import "buttons"
+@import "forms"
+
+body
+  font-family: $Montserrat
+
+.container
+  width: 100%
+  max-width: 1246px
+  margin: auto
+@media (max-width: 1246px)
+  .container
+    padding: 0 40px
+@media (max-width: 768px)
+  .container
+    padding: 0 20px
+
+.title
+  font-family: $Montserrat
+  font-style: normal
+  font-weight: 600
+  font-size: 40px
+  color: $dark
+  line-height: 120%
+  @include bp-1440
+    font-size: 34px
+  @include bp-768
+    font-size: 30px
+
+.subtitle
+  font-size: 20px
+  font-weight: 300
+  color: $dark
+  line-height: 140%
+  font-family: $Montserrat
+
+.title-pink
+  font-size: 20px
+  font-weight: 600
+  font-family: $Montserrat
+  color: $pink
+
+.text
+  color: $dark
+  font-family: $Montserrat
+  font-size: 16px
+  line-height: 180%
+  font-weight: 300
+
+.title-white
+  @extend .title
+  color: $white
+
+.text-page
+  padding-bottom: 40px
+  @extend .text
+  .title
+    padding: 40px 0
+  h2
+    @extend .title
+    padding: 40px 0
+  h3
+    font-size: 22px
+    font-weight: 600
+    margin: 15px 0 20px
+  h4
+    font-size: 16px
+    font-weight: 600
+    margin: 10px 0 15px
+  a
+    color: $pink
+    text-decoration: underline
+  ul
+    padding-left: 40px
+    list-style: disc
+  ol
+    padding-left: 40px
+    list-style: upper-alpha
+    ol
+      padding-left: 40px
+      list-style: upper-roman
+  strong
+    font-weight: bold
+.cup
+  cursor: pointer
+
+hr
+  margin: 20px 0
+  color: $dark
+  opacity: .1
+
+.error
+  display: block
+  font-size: 12px
+  color: $red
+
+// TRANSITIONS
+.fade-enter-active, .fade-leave-active
+  transition: .5s opacity
+
+.fade-enter, .fade-leave-to
+  opacity: 0
+
+.slide-left-enter-active, .slide-left-leave-active
+  transition: .4s transform
+  transform: translateX(0)
+
+.slide-left-enter, .slide-left-leave-to
+  transform: translateX(100%)
+
+.slide-right-enter-active, .slide-right-leave-active
+  transition: .4s transform
+  transform: translateX(0)
+
+.slide-right-enter, .slide-right-leave-to
+  transform: translateX(-100%)
+
+// HEADINGS
+.h1
+  font-size: 40px
+  @include bp-1440
+    font-size: 34px
+  @include bp-768
+    font-size: 30px
+
+.h3
+  font-weight: 600
+  font-size: 20px
+
+.h4
+  font-weight: 600
+  font-size: 14px
+
+// TEXT COLORS
+.is-pink
+  color: $pink
+.is-red
+  color: $red
+
+.is-bold
+  font-weight: 600
+
+input
+  -webkit-appearance: none
+  -moz-appearance: none
+  appearance: none

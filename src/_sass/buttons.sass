@@ -1,0 +1,89 @@
+.btn
+  border-radius: 6px
+  font-family: $Montserrat
+  font-weight: 600
+  border: none
+  padding: 0 25px
+  cursor: pointer
+  outline: none
+  transition: .5s all
+  height: 60px
+  line-height: 60px
+  text-align: center
+  font-size: 16px
+  display: inline-block
+  @include bp-1440
+    font-size: 14px
+    height: 50px
+    line-height: 50px
+  &:focus
+    outline: none
+
+
+.btn-blue
+  @extend .btn
+  background-color: $mentol
+  color: $white
+  &:hover
+    background-color: lighten($mentol, 10%)
+
+.btn-pink
+  @extend .btn
+  background-color: $pink
+  color: $white
+  &:hover
+    background-color: lighten($pink, 10%)
+
+.btn-pink-t
+  @extend .btn
+  background-color: transparent
+  color: $pink
+  &:hover
+    background-color: $pink
+    color: $white
+
+.btn-purple
+  @extend .btn
+  background-color: $purple
+  color: $white
+  &:hover
+    background-color: lighten($purple, 10%)
+
+.btn-disabled
+  opacity: 0.3
+  cursor: not-allowed
+
+.btn-white
+  @extend .btn
+  background-color: $white
+  color: $dark
+  &:hover
+    background-color: $dark
+    color: $white
+
+.btn-white-br
+  @extend .btn
+  background-color: $white
+  color: $dark
+  border: 1px solid rgba($dark, .3)
+  &:hover
+    background-color: $dark
+    color: $white
+
+.btn-white-t
+  @extend .btn
+  background-color: transparent
+  color: white
+  border: 1px solid rgba($white, .3)
+  &:hover
+    background-color: $white
+    color: $dark
+
+.btn-white-o
+  @extend .btn
+  background-color: rgba(256,256,256, .2)
+  color: white
+  border: 1px solid rgba(256,256,256, .2)
+  &:hover
+    background-color: $white
+    color: $dark

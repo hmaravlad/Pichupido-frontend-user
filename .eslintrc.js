@@ -15,6 +15,11 @@ module.exports = {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'class-methods-use-this': 'off',
+    'max-len': ['error', { code: 120 }],
+    'no-restricted-syntax': 'off',
+    'consistent-return': 'off',
+    'interface-name-prefix': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
   },
   overrides: [
     {

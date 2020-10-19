@@ -5,13 +5,13 @@ import axios from 'axios';
 class Http {
   public service: any;
 
-  public token: any;
+  public token: unknown;
 
   constructor() {
     this.setAxios();
   }
 
-  public post(path: string, payload: any) {
+  public post(path: string, payload: unknown) {
     return this.service
       .post(path, payload)
       .then((res: Response) => this.handleSuccess(res))
@@ -25,7 +25,7 @@ class Http {
       .catch((err: Error) => this.handleError(err));
   }
 
-  public put(path: string, payload: any) {
+  public put(path: string, payload: unknown) {
     return this.service
       .put(path, payload)
       .then((res: Response) => this.handleSuccess(res))
@@ -36,7 +36,7 @@ class Http {
     return this.service
       .delete(path)
       .then((res: Response) => this.handleSuccess(res))
-      .catch((err: any) => this.handleError(err));
+      .catch((err: unknown) => this.handleError(err));
   }
 
   private handleSuccess(res: any) {

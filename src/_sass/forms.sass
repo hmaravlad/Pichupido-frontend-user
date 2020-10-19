@@ -1,0 +1,21 @@
+
+.input
+  height: 60px
+  border-radius: 6px
+  padding-left: 20px
+  font-size: 14px
+  font-family: $Montserrat
+  color: $dark
+  border: none
+  outline: none
+  &:focus
+    outline: none
+  +placeholder
+    color: #cdccce
+  @include bp-1440
+    height: 50px
+
+.label
+  font-size: 14px
+  font-weight: 300
+  display: inline-block
