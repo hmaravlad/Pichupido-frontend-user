@@ -108,7 +108,6 @@ export default class Restaurant extends Vue {
     public categoryId: number | any = null;
 
     public mounted() {
-      console.log('aaaaaaa');
       // this.getRestaurant();
     }
 

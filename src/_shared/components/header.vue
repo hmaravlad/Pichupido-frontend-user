@@ -2,30 +2,12 @@
   <div class="header-wrapper" :class="{ 'sticky black active': isHeaderFixed }">
     <div class="header">
       <div class="container">
-        <div class="logo">
-          <router-link to="/" tag="a">
-            <app-logo />
-          </router-link>
-        </div>
-
-        <!--If you need to paste some components from page directly (search/buttons/icons etc)-->
         <slot v-if="subtotal === 0" />
 
-        <button v-if="subtotal > 0 && screenWidth > 480" class="checkout-btn btn-white" @click="openCartModal">
+        <button class="checkout-btn btn-white" @click="openCartModal">
           Checkout £ {{ this.subtotal }}
         </button>
 
-        <div v-if="isOrderExist" @click="openOrderStatusModal" class="order-status black-bag">
-          <button class="btn-blue">Track order</button>
-        </div>
-
-        <div v-if="!user" @click="openSignInModal" class="nav-toggle"><span /></div>
-
-        <div v-else class="header-right">
-          <div class="avatar" @click="openUserMenuModal">
-            <img :src="user.photo" :alt="user.firstName + ' ' + user.lastName" />
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -33,42 +15,12 @@
 
 <script lang="ts">
 import {
-  Component, Prop, Vue, Watch,
+  Component, Vue,
 } from 'vue-property-decorator';
-import http from '@/_shared/utils/http';
-// import UserIcon from '../../_assets/user.svg';
 
-@Component({
-  // components: {
-  //   UserIcon,
-  // },
-})
+@Component({})
 export default class AppHeader extends Vue {
-  @Prop() public type!: string;
-
-  @Prop() public hasVendorBtn!: boolean;
-
   public isHeaderFixed = false;
-
-  public isOrderExist = false;
-
-  public user = null;
-
-  public screenWidth: number = window.innerWidth;
-
-  public mounted() {
-    this.getUser();
-    window.addEventListener('scroll', this.checkScroll);
-    window.addEventListener('resize', this.onResize);
-  }
-
-  public onResize() {
-    this.screenWidth = window.innerWidth;
-  }
-
-  beforeDestroy() {
-    window.removeEventListener('resize', this.onResize);
-  }
 
   get cart() {
     // return this.$store.getters.cart;
@@ -81,40 +33,6 @@ export default class AppHeader extends Vue {
     // } else {
     //   ModalHub.$emit('open', 'modal-cart');
     // }
-  }
-
-  public openUserMenuModal() {
-    // ModalHub.$emit('open', 'modal-user-menu', { animation: 'slide-left' });
-  }
-
-  public openSignInModal() {
-    // ModalHub.$emit('open', 'modal-sign-in', { animation: 'slide-left' });
-  }
-
-  public openOrderStatusModal() {
-    // ModalHub.$emit('open', 'modal-order-status', { animation: 'slide-left' });
-  }
-
-  public getUser() {
-    const user = localStorage.getItem('user');
-    this.user = user ? JSON.parse(user) : null;
-    if (user) {
-      this.getUserOrders();
-    }
-  }
-
-  public getUserOrders() {
-    http.get('/orders?statuses=new,preparing,ready_for_delivery,delivering').then((res: any) => {
-      if (res.length > 0) {
-        this.isOrderExist = true;
-      }
-    });
-  }
-
-  private checkScroll() {
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    this.isHeaderFixed = scrollTop > 100;
-    this.$forceUpdate();
   }
 
   get subtotal() {

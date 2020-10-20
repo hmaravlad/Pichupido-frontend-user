@@ -73,7 +73,7 @@ export default class OrderCheck extends Vue {
   get subtotal() {
     let subtotal = 0;
     this.cart.forEach((elem) => {
-      subtotal = Math.round((subtotal + elem.price) * 100) / 100;
+      // subtotal = Math.round((subtotal + elem.price.value) * 100) / 100;
     });
     return subtotal;
   }
