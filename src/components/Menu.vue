@@ -3,10 +3,6 @@
     <div class="head" :style="`background-image: url(${restaurant.cover});`">
       <app-header class="restaurant-header" />
       <div class="container">
-        <span @click="$router.go(-1)" class="back">
-          <app-icon name="back" />
-          BACK
-        </span>
         <div class="restaurant-logo">
           <img :src="restaurant.logo" :alt="restaurant.name" />
         </div>
@@ -20,11 +16,7 @@
             <p class="restaurant-info-title"><app-icon name="location" />Location</p>
             <p class="restaurant-info-text">{{ restaurant.location }}</p>
           </div>
-          <div
-            v-if="restaurant.todayWorkHours !== 'Not working today' && !restaurant.isClosed"
-            class="restaurant-info-block"
-            :class="{ closed: !restaurant.isClosed }"
-          >
+          <div class="restaurant-info-block">
             <p class="restaurant-info-title"><app-icon name="clock" />Open times</p>
             <p class="restaurant-info-text">{{ restaurant.todayWorkHours }}</p>
           </div>
@@ -75,6 +67,7 @@
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import DishCard from '@/components/dish-card.vue';
 import http from '@/_shared/utils/http';
+import ModalHub from '@/_shared/modals/modal-hub';
 
 @Component({
   components: {
@@ -82,146 +75,151 @@ import http from '@/_shared/utils/http';
   },
 })
 export default class Restaurant extends Vue {
-    public restaurant: RestaurantInfo | null = {
+  public restaurant: RestaurantInfo | null = {
+    id: 1,
+    name: 'Dima restaurants',
+    logo: 'https://via.placeholder.com/512',
+    description: 'Дуже смачна їда',
+    cover: 'https://storage.googleapis.com/foodstufff-stage/vendors/logos/1594332161764.png',
+    location: 'Київ',
+    todayWorkHours: 'До 20:00',
+  };
+
+  public categories: Category[] = [
+    {
       id: 1,
-      name: 'Dima restaurants',
-      logo: 'https://via.placeholder.com/512',
-      description: 'Дуже смачна їда',
-      cover: 'https://storage.googleapis.com/foodstufff-stage/vendors/logos/1594332161764.png',
-      location: 'Київ',
-      todayWorkHours: 'До 20:00',
-    };
+      availability: '10:00-13:00',
+      name: 'Сніданок',
+      isClose: false,
+    },
+  ];
 
-    public categories: Category[] = [
-      {
-        id: 1,
-        availability: '10:00-13:00',
-        name: 'Сніданок',
-        isClose: false,
-      },
-    ];
+  public category: Category | null = null;
 
-    public category: Category | null = null;
+  public dishes: any | null = null;
 
-    public dishes: any | null = null;
+  public categoryId: number | any = null;
 
-    public categoryId: number | any = null;
+  public mounted() {
+    console.log('aaaaaaa');
+    // this.getRestaurant();
+  }
 
-    public mounted() {
-      // this.getRestaurant();
-    }
+  @Watch('$route', { immediate: true, deep: true })
+  onUrlChange() {
+    this.checkCategory();
+    this.checkDish();
+  }
 
-    @Watch('$route', { immediate: true, deep: true })
-    onUrlChange() {
-      this.checkCategory();
-      this.checkDish();
-    }
+  public isCategory(categoryId: number) {
+    return this.categoryId === categoryId;
+  }
 
-    public isCategory(categoryId: number) {
-      return this.categoryId === categoryId;
-    }
+  public setCategory(category: Category) {
+    this.$router.replace({
+      name: 'restaurant-category',
+      params: { id: this.restaurantId, categoryId: `${category.id}` },
+    });
+  }
 
-    public setCategory(category: Category) {
-      this.$router.replace({
-        name: 'restaurant-category',
-        params: { id: this.restaurantId, categoryId: `${category.id}` },
+  public onDishClick(dishId: number, categoryId: number) {
+    if (dishId === this.dishId) {
+      this.openDishModal(dishId, categoryId);
+    } else {
+      this.$router.push({
+        name: 'restaurant-dish',
+        params: {
+          id: this.restaurantId,
+          categoryId: this.categoryId.toString(),
+          dishId: dishId.toString(),
+        },
       });
     }
+  }
 
-    public onDishClick(dishId: number, categoryId: number) {
-      if (dishId === this.dishId) {
-        this.openDishModal(dishId, categoryId);
-      } else {
-        this.$router.push({
-          name: 'restaurant-dish',
-          params: {
-            id: this.restaurantId,
-            categoryId: this.categoryId.toString(),
-            dishId: dishId.toString(),
-          },
-        });
-      }
-    }
+  public openDishModal(dishId: number, categoryId: number) {
+    // ModalHub.$emit('open', 'modal-dish', { data: { dishId, categoryId } });
+  }
 
-    public openDishModal(dishId: number, categoryId: number) {
-      // ModalHub.$emit('open', 'modal-dish', { data: { dishId, categoryId } });
-    }
+  public openRestaurantModal() {
+    ModalHub.$emit('open', 'modal-restaurant', { data: this.restaurant, animation: 'slide-right' });
+  }
 
-    get restaurantId() {
-      return this.$route.params.id;
-    }
+  get restaurantId() {
+    return this.$route.params.id;
+  }
 
-    get dishId() {
-      return parseInt(this.$route.params.dishId, 10);
-    }
+  get dishId() {
+    return parseInt(this.$route.params.dishId, 10);
+  }
 
-    get paramsCategoryId() {
-      return parseInt(this.$route.params.categoryId, 10);
-    }
+  get paramsCategoryId() {
+    return parseInt(this.$route.params.categoryId, 10);
+  }
 
-    private getRestaurant() {
-      http
-        .get(`/restaurants/${this.restaurantId}/menu`)
-        .then((res: { restaurant: RestaurantInfo; menuCategories: Category[] }) => {
-          this.restaurant = res.restaurant;
-          this.categories = res.menuCategories;
-          this.loadCategory();
-        });
-    }
-
-    private loadCategory() {
-      if (this.categoryId) {
-        for (const c of this.categories) {
-          if (c.id === this.categoryId) {
-            this.category = c;
-          }
-        }
-      } else {
-        [this.category] = this.categories;
-        this.categoryId = this.category.id;
-      }
-      this.getDishes();
-    }
-
-    private checkCategory() {
-      if (this.paramsCategoryId) {
-        this.categoryId = this.paramsCategoryId;
+  private getRestaurant() {
+    http
+      .get(`/restaurants/${this.restaurantId}/menu`)
+      .then((res: { restaurant: RestaurantInfo; menuCategories: Category[] }) => {
+        this.restaurant = res.restaurant;
+        this.categories = res.menuCategories;
         this.loadCategory();
-      }
-    }
-
-    private checkDish() {
-      if (!this.dishId) {
-        return false;
-      }
-      setTimeout(() => {
-        this.openDishModal(this.dishId, this.categoryId);
-      }, 100);
-    }
-
-    private getDishes() {
-      http.get(`/restaurants/${this.restaurantId}/category/${this.categoryId}`).then((res: { dishes: any }) => {
-        this.dishes = res.dishes;
       });
+  }
+
+  private loadCategory() {
+    if (this.categoryId) {
+      for (const c of this.categories) {
+        if (c.id === this.categoryId) {
+          this.category = c;
+        }
+      }
+    } else {
+      [this.category] = this.categories;
+      this.categoryId = this.category.id;
     }
+    this.getDishes();
+  }
+
+  private checkCategory() {
+    if (this.paramsCategoryId) {
+      this.categoryId = this.paramsCategoryId;
+      this.loadCategory();
+    }
+  }
+
+  private checkDish() {
+    if (!this.dishId) {
+      return false;
+    }
+    setTimeout(() => {
+      this.openDishModal(this.dishId, this.categoryId);
+    }, 100);
+  }
+
+  private getDishes() {
+    http.get(`/restaurants/${this.restaurantId}/category/${this.categoryId}`).then((res: { dishes: any }) => {
+      this.dishes = res.dishes;
+    });
+  }
 }
 
 export interface RestaurantInfo {
-    id: number;
-    name: string;
-    logo: string;
-    description: string;
-    cover: string;
-    location: string;
-    todayWorkHours: string;
-  }
+  id: number;
+  name: string;
+  logo: string;
+  description: string;
+  cover: string;
+  location: string;
+  todayWorkHours: string;
+}
 
-  interface Category {
-    id: number;
-    availability: string;
-    name: string;
-    isClose: boolean;
-  }
+interface Category {
+  id: number;
+  availability: string;
+  name: string;
+  isClose: boolean;
+}
 </script>
 
 <style lang="sass" scoped>
@@ -249,7 +247,7 @@ export interface RestaurantInfo {
       z-index: 3
 
   .restaurant-logo
-    margin: 60px 0
+    margin: 10px 0 60px
     height: 120px
     width: 120px
     border-radius: 50%
@@ -260,7 +258,7 @@ export interface RestaurantInfo {
       object-fit: cover
 
   .restaurant-info
-    margin-top: 80px
+    margin-top: 160px
     display: flex
     align-items: center
     flex-wrap: wrap

@@ -20,6 +20,7 @@ module.exports = {
     'consistent-return': 'off',
     'interface-name-prefix': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
+    'import/extensions': 'off'
   },
   overrides: [
     {

@@ -92,7 +92,7 @@ export default class AppSelect extends Vue {
     height: 0
     border-style: solid
     border-width: 8px 6px 0 6px
-    border-color: $grey transparent transparent transparent
+    border-color: $black transparent transparent transparent
   select
     padding: 0  40px 0 20px
     cursor: pointer
