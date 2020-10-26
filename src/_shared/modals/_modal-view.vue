@@ -66,35 +66,35 @@ interface ModalOptions {
 </script>
 
 <style lang="sass" scoped>
-  .modal
-    position: fixed
-    z-index: 2000
-    left: 0
-    top: 0
-    width: 100%
-    height: 100%
-    background-color: rgba(255,255,255, .3)
-    pointer-events: none
-    transition: .3s opacity
-    opacity: 0
-    &.active
-      opacity: 1
-      pointer-events: auto
-    &.preventCloseOnBackgroundClick
-      background-color: rgba(255,255,255, 0)
-      height: 7%
-      top: 91%
+.modal
+  position: fixed
+  z-index: 2000
+  left: 0
+  top: 0
+  width: 100%
+  height: 100%
+  background-color: rgba(255,255,255, .3)
+  pointer-events: none
+  transition: .3s opacity
+  opacity: 0
+  &.active
+    opacity: 1
+    pointer-events: auto
+  &.preventCloseOnBackgroundClick
+    background-color: rgba(255,255,255, 0)
+    height: 7%
+    top: 91%
 
-  .modal-inner
-    background-color: $white
-    padding: 40px
-    top: 0
-    right: 0
-    width: 100%
-    position: absolute
-    height: 100vh
-    box-shadow: 0 4px 60px rgba(0, 0, 0, 0.1)
-    overflow-y: scroll
-    &::-webkit-scrollbar
-      display: none
+.modal-inner
+  background-color: $white
+  padding: 40px
+  top: 0
+  right: 0
+  width: 100%
+  position: absolute
+  height: 100vh
+  box-shadow: 0 4px 60px rgba(0, 0, 0, 0.1)
+  overflow-y: scroll
+  &::-webkit-scrollbar
+    display: none
 </style>

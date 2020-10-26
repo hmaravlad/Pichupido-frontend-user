@@ -9,90 +9,10 @@
     <div @click="close" class="close cup">
       <app-icon name="close"/>
     </div>
-    <div class="modal-title">Checkout</div>
+    <div class="modal-title">Оформлення замовлення</div>
 
     <div class="container">
       <div class="columns is-multiline">
-        <div class="base-info column is-half is-full-mobile">
-          <h3 class="title-pink">Delivery information</h3>
-          <p class="select-title">Delivery time</p>
-          <app-input plaseholder="ASAP" :readonly="true" v-model="deliveryInfo.deliverToTime" />
-          <div class="fields is-2">
-            <div class="field">
-              <app-input
-                v-model="deliveryInfo.address.flatAndBuilding"
-                rules="required"
-                name="Flat"
-                placeholder="eg Flat 12, the River building"
-              >
-                Flat number / building name
-              </app-input>
-            </div>
-            <div class="field">
-              <app-input
-                v-model="deliveryInfo.address.street"
-                rules="required"
-                name="Street"
-                placeholder="eg 1 Cousine Lane"
-              >
-                Street address
-              </app-input>
-            </div>
-          </div>
-          <div class="fields is-2">
-            <div class="field">
-              <app-input :readonly="true" v-model="deliveryInfo.address.postcode" rules="required" name="Postcode"
-                >Postcode</app-input
-              >
-            </div>
-            <div class="field">
-              <app-input
-                v-model="deliveryInfo.contactPhone"
-                rules="required|phone"
-                name="Phone"
-                placeholder="+442036991122"
-                >Phone number</app-input
-              >
-            </div>
-          </div>
-          <app-textarea
-            name="DeliveryNotes"
-            placeholder="Please note we can’t accept scheduled delivery times"
-            v-model="deliveryNotes"
-          >
-            Delivery notes
-          </app-textarea>
-          <app-textarea name="KitchenNotes" v-model="kitchenNotes">Kitchen notes</app-textarea>
-        </div>
-        <div class="base-restaurant column is-half is-full-mobile">
-          <h3 class="title-pink">Order information</h3>
-          <div class="order">
-            <div class="restaurant">
-              <div class="restaurant-logo">
-                <img :src="restaurant.logo" :alt="restaurant.name" />
-              </div>
-              <div class="restaurant-info">
-                <p class="restaurant-name">{{ restaurant.name }}</p>
-                <p class="restaurant-location">{{ restaurant.location }}</p>
-              </div>
-            </div>
-            <hr />
-            <order-check/>
-            <p class="error">{{ errorMessage }}</p>
-            <button
-              v-if="!loading"
-              type="submit"
-              class="btn-pink submit"
-              :class="{ isDisablePayButton }"
-              form="form-example"
-            >
-              Confirm and pay £ {{ fullPrice }}
-            </button>
-            <div v-if="loading" class="loader">
-              <app-loader />
-            </div>
-          </div>
-        </div>
         <div class="payment-block column is-half is-full-mobile">
           <h3 class="title-pink ">Please give us your payment details:</h3>
           <div class="payment">
@@ -128,6 +48,39 @@
             </div>
           </div>
         </div>
+        <div class="base-restaurant column is-half is-full-mobile">
+          <h3 class="title-pink">Інформація про замовлення</h3>
+          <div class="order">
+            <div class="restaurant">
+              <div class="restaurant-logo">
+                <img :src="restaurant.logo" :alt="restaurant.name" />
+              </div>
+              <div class="restaurant-info">
+                <p class="restaurant-name">{{ restaurant.name }}</p>
+                <p class="restaurant-location">{{ restaurant.location }}</p>
+              </div>
+            </div>
+            <hr />
+            <order-check/>
+            <p class="error">{{ errorMessage }}</p>
+            <button
+              v-if="!loading"
+              type="submit"
+              class="btn-pink submit"
+              :class="{ isDisablePayButton }"
+              form="form-example"
+            >
+              Підтвердити та оплатити £ {{ fullPrice }}
+            </button>
+            <div v-if="loading" class="loader">
+              <app-loader />
+            </div>
+          </div>
+        </div>
+        <div class="base-info column is-half is-full-mobile">
+          <h3 class="title-pink">Додаткова інформація</h3>
+          <app-textarea name="KitchenNotes" v-model="kitchenNotes">Побажання щодо приготування</app-textarea>
+        </div>
       </div>
     </div>
   </ValidationObserver>
@@ -136,7 +89,7 @@
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import http from '@/_shared/utils/http';
-import store, { ICartDish } from '@/store';
+import { ICartDish } from '@/store';
 import { RestaurantInfo } from '@/components/Menu.vue';
 import {
   confirmPaymentIntent, CardNumber, CardExpiry, CardCvc,
