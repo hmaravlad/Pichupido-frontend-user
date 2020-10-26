@@ -7,13 +7,13 @@
     class="modal-checkout"
   >
     <div @click="close" class="close cup">
-      <app-icon name="close"></app-icon>
+      <app-icon name="close"/>
     </div>
     <div class="modal-title">Checkout</div>
 
     <div class="container">
       <div class="columns is-multiline">
-        <div class="base-info column is-half is-full-mobile" v-if="restaurant">
+        <div class="base-info column is-half is-full-mobile">
           <h3 class="title-pink">Delivery information</h3>
           <p class="select-title">Delivery time</p>
           <app-input plaseholder="ASAP" :readonly="true" v-model="deliveryInfo.deliverToTime" />
@@ -64,7 +64,7 @@
           </app-textarea>
           <app-textarea name="KitchenNotes" v-model="kitchenNotes">Kitchen notes</app-textarea>
         </div>
-        <div class="base-restaurant column is-half is-full-mobile" v-if="restaurant">
+        <div class="base-restaurant column is-half is-full-mobile">
           <h3 class="title-pink">Order information</h3>
           <div class="order">
             <div class="restaurant">
@@ -136,7 +136,7 @@
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import http from '@/_shared/utils/http';
-import { ICartDish } from '@/store';
+import store, { ICartDish } from '@/store';
 import { RestaurantInfo } from '@/components/Menu.vue';
 import {
   confirmPaymentIntent, CardNumber, CardExpiry, CardCvc,
@@ -193,7 +193,15 @@ export default class ModalCheckout extends Vue {
     paymentMethod: 'creditcard',
   };
 
-  public restaurant: RestaurantInfo | null = null;
+  public restaurant: RestaurantInfo | null = {
+    id: 1,
+    name: 'Тататія',
+    logo: 'https://storage.googleapis.com/foodstufff-stage/vendors/logos/1598543125742.png',
+    description: 'Дуже смачна їда',
+    cover: 'https://storage.googleapis.com/foodstufff-stage/vendors/covers/1599779520376.jpg',
+    location: 'Київ',
+    todayWorkHours: 'До 20:00',
+  };
 
   get restaurantId() {
     if (this.$route.params.id) {
@@ -344,8 +352,7 @@ export interface IDeliveryInfo {
   left: 0
 #form-example
   @include bp-480
-    padding: 10px
-    padding-bottom: 60px
+    padding: 10px 10px 60px
 .modal-title
   text-align: center
   margin: 20px 0 80px

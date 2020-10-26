@@ -39,6 +39,7 @@ export default class ModalView extends Vue {
     this.component = component;
     this.animation = options && options.animation ? options.animation : 'fade';
     this.componentData = options && options.data ? options.data : null;
+    this.$emit('open');
   }
 
   public closeModal() {
