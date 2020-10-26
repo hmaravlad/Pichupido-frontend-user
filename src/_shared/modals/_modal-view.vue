@@ -13,10 +13,14 @@
 import ModalHub from '@/_shared/modals/modal-hub.ts';
 import { Component, Vue } from 'vue-property-decorator';
 import ModalRestaurant from '@/components/modal-restaurant.vue';
+import ModalDish from '@/components/modal-dish.vue';
+import ModalCart from '@/_shared/modals/modal-cart.vue';
 
 @Component({
   components: {
     ModalRestaurant,
+    ModalDish,
+    ModalCart,
   },
 })
 export default class ModalView extends Vue {

@@ -2,11 +2,11 @@
   <div v-if="dish.id" class="dish" :class="{ disabled: dish.sold }">
     <div class="dish-info">
       <div class="dish-title">{{ dish.name }}</div>
-      <div v-if="dish.sold" class="dish-availability">Not available</div>
+      <div v-if="dish.sold" class="dish-availability">Немає у наявності</div>
       <div class="dish-text">{{ dish.description | truncate(170) }}</div>
       <div class="dish-price">
-        <span v-if="dish.discountedPrice">£ {{ dish.discountedPrice }}</span>
-        <span :class="{ discounted: dish.discountedPrice }">£ {{ dish.price }}</span>
+        <span v-if="dish.discountedPrice">₴ {{ dish.discountedPrice }}</span>
+        <span :class="{ discounted: dish.discountedPrice }">₴ {{ dish.price }}</span>
       </div>
     </div>
     <div class="dish-image">
@@ -29,6 +29,7 @@ export interface Dish {
     photo: string;
     isAlcohol: boolean;
     sold?: boolean;
+    categoryId?: number;
     id: number;
     price: number;
     discountedPrice: number;

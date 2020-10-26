@@ -1,6 +1,6 @@
 <template>
   <div v-if="dish" class="dish-modal">
-    <span @click="modalHub.$emit('close')" class="close cup"> <app-icon class="back" name="back" /> back </span>
+    <span @click="modalHub.$emit('close')" class="close cup"> <app-icon class="back" name="back" /> назад </span>
 
     <div class="dish-image">
       <img :src="dish.photo" alt="smoky kebab" />
@@ -10,11 +10,11 @@
 
     <div class="buttons-bottom">
       <app-counter @input="updatePrice" class="counter" v-model="counter" />
-      <button @click="addDishToCart" class="btn-pink">Add £ {{ totalPrice }}</button>
+      <button @click="addDishToCart" class="btn-pink">Додати ₴ {{ totalPrice }}</button>
     </div>
     <div class="kitchen-notes">
-      <p>Any requests for the kitchen?</p>
-      <p>You can add these at checkout.</p>
+      <p>Маєте якісь особливі побажання для кухарів?</p>
+      <p>Ви можете додати їх під час оплати.</p>
     </div>
   </div>
 </template>
@@ -31,9 +31,9 @@ export default class ModalDish extends Vue {
 
     @Prop() data!: { dish: Dish};
 
-    public dish: Dish | null = this.data.dish;
+    public dish: Dish | null = ({ ...this.data.dish });
 
-    public totalPrice = 0;
+    public totalPrice = this.dish?.price;
 
     public counter = 1;
 

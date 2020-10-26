@@ -3,7 +3,7 @@
     <div class="back" @click="modalHub.$emit('close')">
       <app-icon name="back" />
     </div>
-    <div class="subtitle">Venue information</div>
+    <div class="subtitle">Коротко про ресторан</div>
 
     <div class="logo">
       <img :src="data.logo" :alt="data.name" />

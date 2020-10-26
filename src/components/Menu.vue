@@ -10,14 +10,14 @@
 
         <div class="restaurant-info">
           <div class="restaurant-info-block">
-            <button @click="openRestaurantModal" class="btn-white-o">Venue information</button>
+            <button @click="openRestaurantModal" class="btn-white-o">Коротко про ресторан</button>
           </div>
           <div class="restaurant-info-block">
-            <p class="restaurant-info-title"><app-icon name="location" />Location</p>
+            <p class="restaurant-info-title"><app-icon name="location" />Розташування</p>
             <p class="restaurant-info-text">{{ restaurant.location }}</p>
           </div>
           <div class="restaurant-info-block">
-            <p class="restaurant-info-title"><app-icon name="clock" />Open times</p>
+            <p class="restaurant-info-title"><app-icon name="clock" />Графік роботи</p>
             <p class="restaurant-info-text">{{ restaurant.todayWorkHours }}</p>
           </div>
         </div>
@@ -57,7 +57,7 @@
 
     <div v-else>
       <div class="subtitle menu-holder">
-        Menu for this restaurant is coming soon...
+        Меню для цього ресторану ще не готове, відвідайте цю сторінку через декілька днів.
       </div>
     </div>
   </div>
@@ -66,7 +66,6 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import DishCard, { Dish } from '@/components/dish-card.vue';
-import http from '@/_shared/utils/http';
 import ModalHub from '@/_shared/modals/modal-hub';
 
 @Component({
@@ -77,10 +76,10 @@ import ModalHub from '@/_shared/modals/modal-hub';
 export default class Restaurant extends Vue {
   public restaurant: RestaurantInfo | null = {
     id: 1,
-    name: 'Dima restaurants',
-    logo: 'https://via.placeholder.com/512',
+    name: 'Тататія',
+    logo: 'https://storage.googleapis.com/foodstufff-stage/vendors/logos/1598543125742.png',
     description: 'Дуже смачна їда',
-    cover: 'https://storage.googleapis.com/foodstufff-stage/vendors/logos/1594332161764.png',
+    cover: 'https://storage.googleapis.com/foodstufff-stage/vendors/covers/1599779520376.jpg',
     location: 'Київ',
     todayWorkHours: 'До 20:00',
   };
@@ -113,7 +112,49 @@ export default class Restaurant extends Vue {
     isClose: false,
   };
 
-  public dishes: Dish[] | null = [
+  public allDishes: Dish[] | null = [
+    {
+      name: 'Омлет',
+      description: 'Дуже смачний омлет',
+      // eslint-disable-next-line max-len
+      photo: 'https://klopotenko.com/wp-content/uploads/2018/03/yaichnica-omlet_siteWeb.jpg',
+      isAlcohol: false,
+      sold: false,
+      id: 4,
+      price: 10,
+      categoryId: 1,
+      discountedPrice: 0,
+      discountPercents: 0,
+      weight: 300,
+    },
+    {
+      name: 'Бутерброд',
+      description: 'Дуже смачні бутерброди',
+      // eslint-disable-next-line max-len
+      photo: 'https://eda.ru/img/eda/1200x-i/s1.eda.ru/StaticContent/Photos/140504151741/140509172554/p_O.jpg',
+      isAlcohol: false,
+      sold: false,
+      id: 5,
+      price: 33,
+      categoryId: 1,
+      discountedPrice: 0,
+      discountPercents: 0,
+      weight: 100,
+    },
+    {
+      name: 'Смачний сніданок',
+      description: 'Дуже смачний смачний сніданок',
+      // eslint-disable-next-line max-len
+      photo: 'https://znaj.ua/crops/8f491f/620x0/1/0/2017/02/08/95849.jpg',
+      isAlcohol: false,
+      sold: false,
+      id: 6,
+      price: 60,
+      categoryId: 1,
+      discountedPrice: 54,
+      discountPercents: 10,
+      weight: 320,
+    },
     {
       name: 'Піца',
       description: 'Дуже смачна піца',
@@ -121,6 +162,7 @@ export default class Restaurant extends Vue {
       isAlcohol: false,
       sold: false,
       id: 1,
+      categoryId: 2,
       price: 20,
       discountedPrice: 0,
       discountPercents: 0,
@@ -135,17 +177,33 @@ export default class Restaurant extends Vue {
       sold: false,
       id: 2,
       price: 600,
+      categoryId: 2,
       discountedPrice: 540,
       discountPercents: 10,
       weight: 300,
     },
+    {
+      name: 'Паста',
+      description: 'Дуже смачна паста',
+      // eslint-disable-next-line max-len
+      photo: 'https://cdn.lifehacker.ru/wp-content/uploads/2018/04/Pasta_1523360590.jpg',
+      isAlcohol: false,
+      sold: false,
+      id: 7,
+      price: 320,
+      categoryId: 3,
+      discountedPrice: 0,
+      discountPercents: 0,
+      weight: 180,
+    },
   ];
+
+  public dishes: Dish[] | null = [];
 
   public categoryId: number | any = 1;
 
   public mounted() {
-    console.log('aaaaaaa');
-    // this.getRestaurant();
+    this.getRestaurant();
   }
 
   public isCategory(categoryId: number) {
@@ -154,6 +212,7 @@ export default class Restaurant extends Vue {
 
   public setCategory(category: Category) {
     this.categoryId = category.id;
+    this.loadCategory();
   }
 
   public onDishClick(dish: Dish) {
@@ -177,13 +236,14 @@ export default class Restaurant extends Vue {
   }
 
   private getRestaurant() {
-    http
-      .get(`/restaurants/${this.restaurantId}/menu`)
-      .then((res: { restaurant: RestaurantInfo; menuCategories: Category[] }) => {
-        this.restaurant = res.restaurant;
-        this.categories = res.menuCategories;
-        this.loadCategory();
-      });
+    // http
+    //   .get(`/restaurants/${this.restaurantId}/menu`)
+    //   .then((res: { restaurant: RestaurantInfo; menuCategories: Category[] }) => {
+    //     this.restaurant = res.restaurant;
+    //     this.categories = res.menuCategories;
+    //     this.loadCategory();
+    //   });
+    this.loadCategory();
   }
 
   private loadCategory() {
@@ -207,19 +267,21 @@ export default class Restaurant extends Vue {
     }
   }
 
-  private checkDish() {
-    if (!this.dishId) {
-      return false;
-    }
-    setTimeout(() => {
-      this.onDishClick(this.dishes);
-    }, 100);
-  }
+  // private checkDish() {
+  //   if (!this.dishId) {
+  //     return false;
+  //   }
+  //   setTimeout(() => {
+  //     this.onDishClick(this.dishes);
+  //   }, 100);
+  // }
 
   private getDishes() {
-    http.get(`/restaurants/${this.restaurantId}/category/${this.categoryId}`).then((res: { dishes: any }) => {
-      this.dishes = res.dishes;
-    });
+    // http.get(`/restaurants/${this.restaurantId}/category/${this.categoryId}`).then((res: { dishes: any }) => {
+    //   this.dishes = res.dishes;
+    // });
+    const category = this.categoryId;
+    this.dishes = this.allDishes!.filter((el) => el.categoryId === category);
   }
 }
 

@@ -7,7 +7,7 @@
       <div class="restaurant-info">
         <p class="restaurant-name">{{ order.restaurant.name }}</p>
         <p class="restaurant-time">{{ orderDate() }}</p>
-        <p class="restaurant-summary">£ {{ order.totalPrice }}</p>
+        <p class="restaurant-summary">₴ {{ order.totalPrice }}</p>
       </div>
     </div>
     <div class="order-slot">

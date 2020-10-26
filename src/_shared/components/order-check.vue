@@ -8,13 +8,13 @@
             {{ dish.modificators.map(d => (d.amount ? `${d.amount}x - ${d.name}` : `${d.name}`)).join(', ') }}
           </div>
         </div>
-        <div class="order-row-price">£ {{ dish.price }}</div>
+        <div class="order-row-price">₴ {{ dish.price }}</div>
       </div>
     </div>
     <hr />
     <div class="order-row">
       <div class="order-row-title">Subtotal</div>
-      <div class="order-row-price">£ {{ subtotal }}</div>
+      <div class="order-row-price">₴ {{ subtotal }}</div>
     </div>
     <div class="order-row">
       <div class="order-text">Service fee</div>
@@ -31,14 +31,13 @@
     <hr />
     <div class="order-row">
       <p class="order-row-total">Total</p>
-      <p class="order-row-total-price">£ {{ fullPrice }}</p>
+      <p class="order-row-total-price">₴ {{ fullPrice }}</p>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import http from '@/_shared/utils/http';
 
 @Component({})
 export default class OrderCheck extends Vue {
@@ -72,9 +71,9 @@ export default class OrderCheck extends Vue {
 
   get subtotal() {
     // let subtotal = 0;
-    this.cart.forEach((elem) => {
-      // subtotal = Math.round((subtotal + elem.price.value) * 100) / 100;
-    });
+    // this.cart.forEach((elem) => {
+    //   // subtotal = Math.round((subtotal + elem.price.value) * 100) / 100;
+    // });
     return 6;
   }
 

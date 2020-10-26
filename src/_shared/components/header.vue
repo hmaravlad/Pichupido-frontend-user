@@ -5,7 +5,7 @@
         <slot v-if="subtotal === 0" />
 
         <button class="checkout-btn btn-white" @click="openCartModal">
-          Checkout £ {{ this.subtotal }}
+          Замовлення ₴ {{ this.subtotal }}
         </button>
 
       </div>
@@ -17,22 +17,20 @@
 import {
   Component, Vue,
 } from 'vue-property-decorator';
+import ModalHub from '@/_shared/modals/modal-hub';
 
 @Component({})
 export default class AppHeader extends Vue {
   public isHeaderFixed = false;
 
   get cart() {
-    // return this.$store.getters.cart;
-    return [];
+    return this.$store.getters.cart;
   }
 
   public openCartModal() {
-    // if (!this.$store.getters.postcode.length) {
-    //   ModalHub.$emit('open', 'modal-location', { data: { isCart: true } });
-    // } else {
-    //   ModalHub.$emit('open', 'modal-cart');
-    // }
+    if (this.subtotal > 0) {
+      ModalHub.$emit('open', 'modal-cart');
+    }
   }
 
   get subtotal() {
