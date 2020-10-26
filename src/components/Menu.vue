@@ -24,7 +24,7 @@
       </div>
     </div>
 
-    <div v-if="categoryId" class="menu" :class="{ closed: restaurant.isClosed }">
+    <div v-if="categoryId" class="menu">
       <div class="container">
         <div class="tabs">
           <ul>
@@ -47,7 +47,7 @@
 
         <div v-for="c of categories" :key="c.id">
           <div v-if="isCategory(c.id)" class="dishes" v-bind:class="{ 'menu-close': c.isClosed }">
-            <div class="dish-wrapper" @click="!d.sold ? onDishClick(d.id, c.id) : null" v-for="d of dishes" :key="d.id">
+            <div class="dish-wrapper" @click="!d.sold ? onDishClick(d) : null" v-for="d of dishes" :key="d.id">
               <dish-card :dish="d" />
             </div>
           </div>
@@ -64,8 +64,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from 'vue-property-decorator';
-import DishCard from '@/components/dish-card.vue';
+import { Component, Vue } from 'vue-property-decorator';
+import DishCard, { Dish } from '@/components/dish-card.vue';
 import http from '@/_shared/utils/http';
 import ModalHub from '@/_shared/modals/modal-hub';
 
@@ -92,23 +92,60 @@ export default class Restaurant extends Vue {
       name: 'Сніданок',
       isClose: false,
     },
+    {
+      id: 2,
+      availability: '13:00-19:00',
+      name: 'Обід',
+      isClose: false,
+    },
+    {
+      id: 3,
+      availability: '19:00-23:00',
+      name: 'Вечеря',
+      isClose: false,
+    },
   ];
 
-  public category: Category | null = null;
+  public category: Category | null = {
+    id: 1,
+    availability: '10:00-13:00',
+    name: 'Сніданок',
+    isClose: false,
+  };
 
-  public dishes: any | null = null;
+  public dishes: Dish[] | null = [
+    {
+      name: 'Піца',
+      description: 'Дуже смачна піца',
+      photo: 'https://storage.googleapis.com/foodstufff/dishes/1602536527928.jpg',
+      isAlcohol: false,
+      sold: false,
+      id: 1,
+      price: 20,
+      discountedPrice: 0,
+      discountPercents: 0,
+      weight: 100,
+    },
+    {
+      name: 'Суші',
+      description: 'Дуже смачні суші',
+      // eslint-disable-next-line max-len
+      photo: 'https://gurmans.dp.ua/giuseppe/7980-large_default/sushi-set-kaliforniya.jpg',
+      isAlcohol: false,
+      sold: false,
+      id: 2,
+      price: 600,
+      discountedPrice: 540,
+      discountPercents: 10,
+      weight: 300,
+    },
+  ];
 
-  public categoryId: number | any = null;
+  public categoryId: number | any = 1;
 
   public mounted() {
     console.log('aaaaaaa');
     // this.getRestaurant();
-  }
-
-  @Watch('$route', { immediate: true, deep: true })
-  onUrlChange() {
-    this.checkCategory();
-    this.checkDish();
   }
 
   public isCategory(categoryId: number) {
@@ -116,29 +153,11 @@ export default class Restaurant extends Vue {
   }
 
   public setCategory(category: Category) {
-    this.$router.replace({
-      name: 'restaurant-category',
-      params: { id: this.restaurantId, categoryId: `${category.id}` },
-    });
+    this.categoryId = category.id;
   }
 
-  public onDishClick(dishId: number, categoryId: number) {
-    if (dishId === this.dishId) {
-      this.openDishModal(dishId, categoryId);
-    } else {
-      this.$router.push({
-        name: 'restaurant-dish',
-        params: {
-          id: this.restaurantId,
-          categoryId: this.categoryId.toString(),
-          dishId: dishId.toString(),
-        },
-      });
-    }
-  }
-
-  public openDishModal(dishId: number, categoryId: number) {
-    // ModalHub.$emit('open', 'modal-dish', { data: { dishId, categoryId } });
+  public onDishClick(dish: Dish) {
+    ModalHub.$emit('open', 'modal-dish', { data: { dish } });
   }
 
   public openRestaurantModal() {
@@ -193,7 +212,7 @@ export default class Restaurant extends Vue {
       return false;
     }
     setTimeout(() => {
-      this.openDishModal(this.dishId, this.categoryId);
+      this.onDishClick(this.dishes);
     }, 100);
   }
 
@@ -293,7 +312,7 @@ interface Category {
       font-weight: 600
 
   .tabs
-    padding-bottom: 40px
+    padding-bottom: 20px
     overflow-x: auto
     ul
       display: flex
@@ -301,7 +320,7 @@ interface Category {
         width: 250%
     li
       margin: 0 20px
-      padding: 40px 0
+      padding: 15px 0
       font-size: 20px
       font-weight: 600
       cursor: pointer
@@ -317,7 +336,7 @@ interface Category {
 
   .category-availability
     font-size: 14px
-    margin-bottom: 40px
+    margin-bottom: 20px
     color: $darkgray
     .icon
       margin-left: 20px

@@ -20,7 +20,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component({})
 export default class DishCard extends Vue {
-    @Prop() public dish!: DishCard;
+    @Prop() public dish!: Dish;
 }
 
 export interface Dish {
