@@ -46,8 +46,6 @@ export default class ModalCart extends Vue {
 
   public cart = [];
 
-  public quote: IQuote | null = null;
-
   public restaurantId: any;
 
   public user: any = null;
@@ -126,14 +124,6 @@ export default class ModalCart extends Vue {
     const user = localStorage.getItem('user');
     this.user = user ? JSON.parse(user) : null;
   }
-}
-
-export interface IQuote {
-  time: string;
-  price: {
-    text: string;
-    value: number;
-  };
 }
 </script>
 

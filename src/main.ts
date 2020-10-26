@@ -3,6 +3,7 @@ import store from '@/store';
 import App from './App.vue';
 import router from './router';
 import '@/_shared/components/_global';
+import '@/_shared/utils/validation.ts';
 import '@/_shared/controls';
 import '@/_shared/utils/pipes.ts';
 
