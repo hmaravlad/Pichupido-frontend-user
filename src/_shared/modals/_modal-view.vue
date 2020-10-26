@@ -15,12 +15,14 @@ import { Component, Vue } from 'vue-property-decorator';
 import ModalRestaurant from '@/components/modal-restaurant.vue';
 import ModalDish from '@/components/modal-dish.vue';
 import ModalCart from '@/_shared/modals/modal-cart.vue';
+import ModalCheckout from '@/_shared/modals/modal-checkout.vue';
 
 @Component({
   components: {
     ModalRestaurant,
     ModalDish,
     ModalCart,
+    ModalCheckout,
   },
 })
 export default class ModalView extends Vue {
