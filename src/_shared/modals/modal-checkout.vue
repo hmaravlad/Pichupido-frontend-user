@@ -14,36 +14,38 @@
     <div class="container">
       <div class="columns is-multiline">
         <div class="payment-block column is-half is-full-mobile">
-          <h3 class="title-pink ">Please give us your payment details:</h3>
+          <h3 class="title-pink ">Будь ласка введіть дані оплати</h3>
           <div class="payment">
-            <app-radio>By credit card</app-radio>
-            <p class="payment-title">Card number</p>
-            <div class="card-number">
-              <card-number
-                class="stripe-card"
-                :stripe="stripePublicKey"
-                :options="stripeOptions"
-                @change="number = $event.complete"
-              />
-            </div>
-            <div class="fields is-2">
-              <div class="field">
-                <p class="payment-title">Expiry date</p>
-                <card-expiry
+            <app-switcher class="is-marginless" v-model="byCard">Готівка</app-switcher>
+            <div v-if="!byCard">
+              <p class="payment-title">Номер картки</p>
+              <div class="card-number">
+                <card-number
                   class="stripe-card"
                   :stripe="stripePublicKey"
                   :options="stripeOptions"
-                  @change="expiry = $event.complete"
+                  @change="number = $event.complete"
                 />
               </div>
-              <div class="field">
-                <p class="payment-title">CVV number</p>
-                <card-cvc
-                  class="stripe-card"
-                  :stripe="stripePublicKey"
-                  :options="stripeOptions"
-                  @change="cvc = $event.complete"
-                />
+              <div class="fields is-2">
+                <div class="field">
+                  <p class="payment-title">Expiry date</p>
+                  <card-expiry
+                    class="stripe-card"
+                    :stripe="stripePublicKey"
+                    :options="stripeOptions"
+                    @change="expiry = $event.complete"
+                  />
+                </div>
+                <div class="field">
+                  <p class="payment-title">CVV number</p>
+                  <card-cvc
+                    class="stripe-card"
+                    :stripe="stripePublicKey"
+                    :options="stripeOptions"
+                    @change="cvc = $event.complete"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -108,6 +110,8 @@ export default class ModalCheckout extends Vue {
   public $refs!: {
     form: HTMLFormElement;
   };
+
+  public byCard = false;
 
   public stripePublicKey = Environment.stripePublicKey;
 

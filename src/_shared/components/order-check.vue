@@ -4,33 +4,13 @@
       <div class="order-row">
         <div>
           <div class="order-row-title">{{ dish.amount }}x - {{ dish.name }}</div>
-          <div class="order-row-subtitle">
-            {{ dish.modificators.map(d => (d.amount ? `${d.amount}x - ${d.name}` : `${d.name}`)).join(', ') }}
-          </div>
         </div>
         <div class="order-row-price">₴ {{ dish.price }}</div>
       </div>
     </div>
     <hr />
     <div class="order-row">
-      <div class="order-row-title">Subtotal</div>
-      <div class="order-row-price">₴ {{ subtotal }}</div>
-    </div>
-    <div class="order-row">
-      <div class="order-text">Service fee</div>
-      <div class="order-text-gray" v-html="serviceFee.text" />
-    </div>
-    <div class="order-row">
-      <div class="order-text">Delivery fee</div>
-      <div class="order-text-gray" v-html="quote.price.text" />
-    </div>
-    <div class="order-row">
-      <div class="order-text">Delivery time</div>
-      <div class="order-text-gray">{{ quote.time }} minutes</div>
-    </div>
-    <hr />
-    <div class="order-row">
-      <p class="order-row-total">Total</p>
+      <p class="order-row-total">Сума</p>
       <p class="order-row-total-price">₴ {{ fullPrice }}</p>
     </div>
   </div>
@@ -38,10 +18,11 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import { ICartDish } from '@/store';
 
 @Component({})
 export default class OrderCheck extends Vue {
-  public cart: [] = [];
+  public cart: ICartDish[] | null = [];
 
   public quote = {
     time: '',
@@ -64,17 +45,17 @@ export default class OrderCheck extends Vue {
   // }
 
   mounted() {
-    // this.cart = this.$store.getters.cart;
+    this.cart = this.$store.getters.cart;
     // this.serviceFee = getServiceFee();
     // this.quote = { time: getQuoteTime(), price: getQuotePrice() };
   }
 
   get subtotal() {
-    // let subtotal = 0;
-    // this.cart.forEach((elem) => {
-    //   // subtotal = Math.round((subtotal + elem.price.value) * 100) / 100;
-    // });
-    return 6;
+    let subtotal = 0;
+    this.cart!.forEach((elem) => {
+      subtotal = Math.round((subtotal + elem.price) * 100) / 100;
+    });
+    return subtotal;
   }
 
   get fullPrice() {
