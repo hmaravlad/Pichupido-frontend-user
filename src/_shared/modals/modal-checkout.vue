@@ -324,6 +324,7 @@ export interface IDeliveryInfo {
       width: 50%
       padding: 0 30px
   .base-info
+    margin-top: -250px
     @include bp-768
       order: 1
   .base-restaurant
