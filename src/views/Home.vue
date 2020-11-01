@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../_assets/logo.png">
+    <img @click="openRestaurant" alt="Vue logo" src="../_assets/logo.png">
   </div>
 </template>
 
@@ -8,5 +8,9 @@
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component({})
-export default class Home extends Vue {}
+export default class Home extends Vue {
+  public openRestaurant() {
+    this.$router.push('/restaurants/1');
+  }
+}
 </script>
