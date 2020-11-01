@@ -75,7 +75,6 @@ import http from '@/_shared/utils/http';
   },
 })
 export default class Restaurant extends Vue {
-
   public restaurant = {};
 
   public categories: Category[] = [
