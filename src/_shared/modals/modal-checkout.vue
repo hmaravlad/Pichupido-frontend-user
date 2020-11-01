@@ -7,65 +7,51 @@
     class="modal-checkout"
   >
     <div @click="close" class="close cup">
-      <app-icon name="close"></app-icon>
+      <app-icon name="close"/>
     </div>
-    <div class="modal-title">Checkout</div>
+    <div class="modal-title">Оформлення замовлення</div>
 
     <div class="container">
       <div class="columns is-multiline">
-        <div class="base-info column is-half is-full-mobile" v-if="restaurant">
-          <h3 class="title-pink">Delivery information</h3>
-          <p class="select-title">Delivery time</p>
-          <app-input plaseholder="ASAP" :readonly="true" v-model="deliveryInfo.deliverToTime" />
-          <div class="fields is-2">
-            <div class="field">
-              <app-input
-                v-model="deliveryInfo.address.flatAndBuilding"
-                rules="required"
-                name="Flat"
-                placeholder="eg Flat 12, the River building"
-              >
-                Flat number / building name
-              </app-input>
-            </div>
-            <div class="field">
-              <app-input
-                v-model="deliveryInfo.address.street"
-                rules="required"
-                name="Street"
-                placeholder="eg 1 Cousine Lane"
-              >
-                Street address
-              </app-input>
-            </div>
-          </div>
-          <div class="fields is-2">
-            <div class="field">
-              <app-input :readonly="true" v-model="deliveryInfo.address.postcode" rules="required" name="Postcode"
-                >Postcode</app-input
-              >
-            </div>
-            <div class="field">
-              <app-input
-                v-model="deliveryInfo.contactPhone"
-                rules="required|phone"
-                name="Phone"
-                placeholder="+442036991122"
-                >Phone number</app-input
-              >
+        <div class="payment-block column is-half is-full-mobile">
+          <h3 class="title-pink ">Будь ласка введіть дані оплати</h3>
+          <div class="payment">
+            <app-switcher class="is-marginless" v-model="byCard">Готівка</app-switcher>
+            <div v-if="!byCard">
+              <p class="payment-title">Номер картки</p>
+              <div class="card-number">
+                <card-number
+                  class="stripe-card"
+                  :stripe="stripePublicKey"
+                  :options="stripeOptions"
+                  @change="number = $event.complete"
+                />
+              </div>
+              <div class="fields is-2">
+                <div class="field">
+                  <p class="payment-title">Expiry date</p>
+                  <card-expiry
+                    class="stripe-card"
+                    :stripe="stripePublicKey"
+                    :options="stripeOptions"
+                    @change="expiry = $event.complete"
+                  />
+                </div>
+                <div class="field">
+                  <p class="payment-title">CVV number</p>
+                  <card-cvc
+                    class="stripe-card"
+                    :stripe="stripePublicKey"
+                    :options="stripeOptions"
+                    @change="cvc = $event.complete"
+                  />
+                </div>
+              </div>
             </div>
           </div>
-          <app-textarea
-            name="DeliveryNotes"
-            placeholder="Please note we can’t accept scheduled delivery times"
-            v-model="deliveryNotes"
-          >
-            Delivery notes
-          </app-textarea>
-          <app-textarea name="KitchenNotes" v-model="kitchenNotes">Kitchen notes</app-textarea>
         </div>
-        <div class="base-restaurant column is-half is-full-mobile" v-if="restaurant">
-          <h3 class="title-pink">Order information</h3>
+        <div class="base-restaurant column is-half is-full-mobile">
+          <h3 class="title-pink">Інформація про замовлення</h3>
           <div class="order">
             <div class="restaurant">
               <div class="restaurant-logo">
@@ -86,47 +72,16 @@
               :class="{ isDisablePayButton }"
               form="form-example"
             >
-              Confirm and pay £ {{ fullPrice }}
+              Підтвердити та оплатити £ {{ fullPrice }}
             </button>
             <div v-if="loading" class="loader">
               <app-loader />
             </div>
           </div>
         </div>
-        <div class="payment-block column is-half is-full-mobile">
-          <h3 class="title-pink ">Please give us your payment details:</h3>
-          <div class="payment">
-            <app-radio>By credit card</app-radio>
-            <p class="payment-title">Card number</p>
-            <div class="card-number">
-              <card-number
-                class="stripe-card"
-                :stripe="stripePublicKey"
-                :options="stripeOptions"
-                @change="number = $event.complete"
-              />
-            </div>
-            <div class="fields is-2">
-              <div class="field">
-                <p class="payment-title">Expiry date</p>
-                <card-expiry
-                  class="stripe-card"
-                  :stripe="stripePublicKey"
-                  :options="stripeOptions"
-                  @change="expiry = $event.complete"
-                />
-              </div>
-              <div class="field">
-                <p class="payment-title">CVV number</p>
-                <card-cvc
-                  class="stripe-card"
-                  :stripe="stripePublicKey"
-                  :options="stripeOptions"
-                  @change="cvc = $event.complete"
-                />
-              </div>
-            </div>
-          </div>
+        <div class="base-info column is-half is-full-mobile">
+          <h3 class="title-pink">Додаткова інформація</h3>
+          <app-textarea name="KitchenNotes" v-model="kitchenNotes">Побажання щодо приготування</app-textarea>
         </div>
       </div>
     </div>
@@ -155,6 +110,8 @@ export default class ModalCheckout extends Vue {
   public $refs!: {
     form: HTMLFormElement;
   };
+
+  public byCard = false;
 
   public stripePublicKey = Environment.stripePublicKey;
 
@@ -193,7 +150,15 @@ export default class ModalCheckout extends Vue {
     paymentMethod: 'creditcard',
   };
 
-  public restaurant: RestaurantInfo | null = null;
+  public restaurant: RestaurantInfo | null = {
+    id: 1,
+    name: 'Тататія',
+    logo: 'https://storage.googleapis.com/foodstufff-stage/vendors/logos/1598543125742.png',
+    description: 'Дуже смачна їда',
+    cover: 'https://storage.googleapis.com/foodstufff-stage/vendors/covers/1599779520376.jpg',
+    location: 'Київ',
+    todayWorkHours: 'До 20:00',
+  };
 
   get restaurantId() {
     if (this.$route.params.id) {
@@ -344,8 +309,7 @@ export interface IDeliveryInfo {
   left: 0
 #form-example
   @include bp-480
-    padding: 10px
-    padding-bottom: 60px
+    padding: 10px 10px 60px
 .modal-title
   text-align: center
   margin: 20px 0 80px
@@ -364,6 +328,7 @@ export interface IDeliveryInfo {
       width: 50%
       padding: 0 30px
   .base-info
+    margin-top: -250px
     @include bp-768
       order: 1
   .base-restaurant

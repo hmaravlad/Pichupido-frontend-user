@@ -1,42 +1,5 @@
 <template>
-  <div class="footer">
-    <div class="logo container">
-      <router-link tag="a" to="/">
-        <app-logo />
-      </router-link>
-    </div>
-    <div class="container sections">
-      <ul class="section links">
-        <li>
-          <router-link tag="a" :to="{ path: 'vendor', query: { open: 'modal-vendor-sign-up' } }">
-            <app-icon name="store" /> Become a vendor</router-link
-          >
-        </li>
-        <li>
-          <router-link tag="a" :to="{ path: 'vendor', query: { open: 'modal-vendor-sign-in' } }">
-            <app-icon name="key" /> Vendor login</router-link
-          >
-        </li>
-      </ul>
-
-      <ul class="section links">
-        <li><router-link :to="{ path: '/about' }" tag="a">About us</router-link></li>
-        <!--<li><router-link :to="{ path: '/faq' }" tag="a">FAQs</router-link></li>-->
-        <li><router-link :to="{ path: '/privacy-policy' }" tag="a">Privacy policy</router-link></li>
-        <li><router-link :to="{ path: '/terms-of-service' }" tag="a">Terms of Service</router-link></li>
-        <li><router-link :to="{ path: '/cookie-policy' }" tag="a">Cookie Policy</router-link></li>
-        <li><router-link :to="{ path: '/contact' }" tag="a">Contact us</router-link></li>
-      </ul>
-
-      <div class="section social">
-        <div class="social-links">
-          <a href="https://www.facebook.com/foodstuffcambs/" target="_blank"><app-icon name="facebook"/></a>
-          <a href="https://www.instagram.com/foodstuffcambs/" target="_blank"><app-icon name="instagram"/></a>
-        </div>
-        <p class="copyright">© 2020 Foodstufff.</p>
-      </div>
-    </div>
-  </div>
+  <p>FOOTER</p>
 </template>
 
 <script lang="ts">

@@ -68,6 +68,7 @@ export default class ModalCart extends Vue {
     // };
 
     ModalHub.$emit('close');
+
     this.modalHub.$emit('open', 'modal-checkout');
 
     // http
