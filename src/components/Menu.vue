@@ -67,6 +67,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import DishCard, { Dish } from '@/components/dish-card.vue';
 import ModalHub from '@/_shared/modals/modal-hub';
+import http from '@/_shared/utils/http';
 
 @Component({
   components: {
@@ -74,15 +75,8 @@ import ModalHub from '@/_shared/modals/modal-hub';
   },
 })
 export default class Restaurant extends Vue {
-  public restaurant: RestaurantInfo | null = {
-    id: 1,
-    name: 'Тататія',
-    logo: 'https://storage.googleapis.com/foodstufff-stage/vendors/logos/1598543125742.png',
-    description: 'Дуже смачна їда',
-    cover: 'https://storage.googleapis.com/foodstufff-stage/vendors/covers/1599779520376.jpg',
-    location: 'Київ',
-    todayWorkHours: 'До 20:00',
-  };
+
+  public restaurant = {};
 
   public categories: Category[] = [
     {
@@ -236,13 +230,19 @@ export default class Restaurant extends Vue {
   }
 
   private getRestaurant() {
-    // http
-    //   .get(`/restaurants/${this.restaurantId}/menu`)
-    //   .then((res: { restaurant: RestaurantInfo; menuCategories: Category[] }) => {
-    //     this.restaurant = res.restaurant;
-    //     this.categories = res.menuCategories;
-    //     this.loadCategory();
-    //   });
+    http
+      .get(`/restaurants/${this.restaurantId}`)
+      .then((res: any) => {
+        this.restaurant = {
+          id: res.id,
+          name: res.name,
+          logo: res.logo,
+          cover: res.cover,
+          location: res.location,
+          todayWorkHours: res.workingHours,
+        };
+        this.loadCategory();
+      });
     this.loadCategory();
   }
 
