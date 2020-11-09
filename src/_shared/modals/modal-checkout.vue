@@ -135,20 +135,7 @@ export default class ModalCheckout extends Vue {
 
   public expiry = false;
 
-  public deliveryInfo: IDeliveryInfo = {
-    processesDurationMins: {
-      preparation: 1,
-      delivery: 0,
-    },
-    deliverToTime: '',
-    address: {
-      flatAndBuilding: '',
-      street: '',
-      postcode: '',
-    },
-    contactPhone: '',
-    paymentMethod: 'creditcard',
-  };
+  public paymentMethod = 'creditCard';
 
   public restaurant: RestaurantInfo | null = {
     id: 1,
@@ -172,6 +159,7 @@ export default class ModalCheckout extends Vue {
   }
 
   public pay(clientSecret: string) {
+    console.log(clientSecret);
     return confirmPaymentIntent(clientSecret);
   }
 
@@ -191,36 +179,20 @@ export default class ModalCheckout extends Vue {
     if (!isValid) {
       return;
     }
-    const resultOrder: any = this.deliveryInfo;
+    const resultOrder: any = {};
     const dishes = this.cart.map((dish: any) => ({
       id: dish.id,
       name: dish.name,
       amount: dish.amount,
       price: dish.price,
-      modificators: dish.modificators.map((mod: any) => {
-        if (mod.amount) {
-          return {
-            id: mod.id,
-            name: mod.name,
-            price: mod.price,
-            amount: mod.amount,
-          };
-        }
-        return {
-          id: mod.id,
-          name: mod.name,
-          price: mod.price,
-        };
-      }),
     }));
     const cart = {
       dishes,
-      restaurantId: this.$store.getters.lastRestaurant, // || this.$route.params.id
     };
-    resultOrder.cartPrice = this.subtotal;
-    resultOrder.totalPrice = this.fullPrice;
+    resultOrder.price = this.fullPrice;
+    resultOrder.tableId = this.$route.query.tableId;
+    resultOrder.paymentMethod = 'online';
     resultOrder.cart = cart;
-    resultOrder.deliveryNotes = this.deliveryNotes;
     resultOrder.kitchenNotes = this.kitchenNotes;
 
     if (this.number && this.cvc && this.expiry) {
@@ -229,12 +201,9 @@ export default class ModalCheckout extends Vue {
       http
         .post('/orders', resultOrder)
         .then((res: any) => {
-          orderId = res.id;
-          localStorage.setItem('preparedOrderId', orderId);
-
-          return http.post(`/orders/${res.id}/payments`, {});
+          orderId = res.orderId;
+          return this.pay(res.clientSecret);
         })
-        .then((res: any) => this.pay(res.clientSecret))
         .then((res: any) => {
           if (res.error) {
             throw new Error(res.error.message);
@@ -243,8 +212,18 @@ export default class ModalCheckout extends Vue {
             this.loading = false;
             throw new Error('Something went wrong with payment');
           }
-          this.isDisablePayButton = true;
-          return http.post(`/orders/${orderId}/payments/confirm`, {});
+          return http.post(`/orders/${orderId}/confirm`, {});
+        })
+        .then(() => {
+          localStorage.removeItem('preparedOrderId');
+          ModalHub.$emit('close', {
+            preventCloseOnBackgroundClick: {
+              component: 'modal-cart-overview',
+              status: false,
+            },
+          });
+          ModalHub.$emit('open', 'modal-success-order');
+          this.$store.commit('clearCart');
         })
         .catch((err: any) => {
           this.loading = false;
@@ -328,7 +307,7 @@ export interface IDeliveryInfo {
       width: 50%
       padding: 0 30px
   .base-info
-    margin-top: -250px
+    margin-top: -130px
     @include bp-768
       order: 1
   .base-restaurant
