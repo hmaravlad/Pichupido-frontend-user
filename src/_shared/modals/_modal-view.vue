@@ -16,6 +16,7 @@ import ModalRestaurant from '@/components/modal-restaurant.vue';
 import ModalDish from '@/components/modal-dish.vue';
 import ModalCart from '@/_shared/modals/modal-cart.vue';
 import ModalCheckout from '@/_shared/modals/modal-checkout.vue';
+import ModalSuccessOrder from '@/_shared/modals/modal-success-order.vue';
 
 @Component({
   components: {
@@ -23,6 +24,7 @@ import ModalCheckout from '@/_shared/modals/modal-checkout.vue';
     ModalDish,
     ModalCart,
     ModalCheckout,
+    ModalSuccessOrder,
   },
 })
 export default class ModalView extends Vue {
