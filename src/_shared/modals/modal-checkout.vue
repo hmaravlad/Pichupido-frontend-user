@@ -199,7 +199,7 @@ export default class ModalCheckout extends Vue {
       this.loading = true;
       let orderId: string;
       http
-        .post('/orders', resultOrder)
+        .post('/restaurants/4/orders', resultOrder)
         .then((res: any) => {
           orderId = res.orderId;
           return this.pay(res.clientSecret);
@@ -212,7 +212,7 @@ export default class ModalCheckout extends Vue {
             this.loading = false;
             throw new Error('Something went wrong with payment');
           }
-          return http.post(`/orders/${orderId}/confirm`, {});
+          return http.post(`/restaurants/4/orders/${orderId}/confirm`, {});
         })
         .then(() => {
           localStorage.removeItem('preparedOrderId');
